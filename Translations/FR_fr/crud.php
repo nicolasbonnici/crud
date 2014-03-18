@@ -1,0 +1,5 @@
+<?php
+
+$tr['hello'] = 'Bonjour';
+
+?>
