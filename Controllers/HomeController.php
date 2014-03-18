@@ -1,5 +1,5 @@
 <?php
-namespace modules\crud\Controllers;
+namespace bundles\crud\Controllers;
 
 use Library\Core\ControllerException;
 use Library\Core\CoreEntityException;
@@ -19,7 +19,7 @@ class HomeController extends \Library\Core\Auth {
 
     /**
      * Crud model couch instance
-     * @var \modules\crud\Models\Crud
+     * @var \bundles\crud\Models\Crud
      */
     private $oCrudModel;
 
@@ -42,11 +42,11 @@ class HomeController extends \Library\Core\Auth {
             count($this->aEntitiesScope) > 0 &&
             !in_array($this->_params['entity'], $this->aEntitiesScope)
         ) {
-            throw new ControllerException('Entity restricted in CrudController scope', \modules\crud\Models\Crud::ERROR_FORBIDDEN_BY_ACL);
+            throw new ControllerException('Entity restricted in CrudController scope', \bundles\crud\Models\Crud::ERROR_FORBIDDEN_BY_ACL);
         }
 
         if ($this->oUser->getId() !== intval($this->_session['iduser'])) {
-            throw new ControllerException('User session is invalid', \modules\crud\Models\Crud::ERROR_USER_INVALID);
+            throw new ControllerException('User session is invalid', \bundles\crud\Models\Crud::ERROR_USER_INVALID);
         }
 
         // Check user permissions on entity then entity itself
@@ -65,13 +65,13 @@ class HomeController extends \Library\Core\Auth {
                 $iPrimaryKey = ((isset($this->_params['pk']) && intval($this->_params['pk']) > 0) ? intval($this->_params['pk']) : 0);
 
                 // Check Entity instance with Crud model constructor
-                $this->oCrudModel = new \modules\crud\Models\Crud(ucfirst($sEntityName), $iPrimaryKey, $this->oUser);
-            } catch (\modules\crud\Models\CrudModelException $oException) {
-                throw new ControllerException('Invalid Entity requested!', \modules\crud\Models\Crud::ERROR_ENTITY_NOT_LOADABLE);
+                $this->oCrudModel = new \bundles\crud\Models\Crud(ucfirst($sEntityName), $iPrimaryKey, $this->oUser);
+            } catch (\bundles\crud\Models\CrudModelException $oException) {
+                throw new ControllerException('Invalid Entity requested!', \bundles\crud\Models\Crud::ERROR_ENTITY_NOT_LOADABLE);
             }
 
         } else {
-            throw new ControllerException('Error forbidden by ACL or unauthorized action: ' . $this->_action, \modules\crud\Models\Crud::ERROR_FORBIDDEN_BY_ACL);
+            throw new ControllerException('Error forbidden by ACL or unauthorized action: ' . $this->_action, \bundles\crud\Models\Crud::ERROR_FORBIDDEN_BY_ACL);
         }
     }
 
@@ -105,7 +105,7 @@ class HomeController extends \Library\Core\Auth {
                 $this->_view['bCreateEntity'] = false;
             }
 
-        } catch (\modules\crud\Models\CrudModelException $oException) {
+        } catch (\bundles\crud\Models\CrudModelException $oException) {
             $this->_view['bCreateNewEntity'] = false;
             $this->_view['error_message'] = $oException->getMessage();
             $this->_view['error_code'] = $oException->getCode();
@@ -130,7 +130,7 @@ class HomeController extends \Library\Core\Auth {
             $this->_view['oEntity'] = $this->oCrudModel->read();
             $this->_view['iStatus'] = self::XHR_STATUS_OK;
 
-        } catch (\modules\crud\Models\CrudModelException $oException) {
+        } catch (\bundles\crud\Models\CrudModelException $oException) {
             $this->_view['iStatus'] = self::XHR_STATUS_ERROR;
             $this->_view['error_message'] = $oException->getMessage();
             $this->_view['error_code'] = $oException->getCode();
@@ -162,7 +162,7 @@ class HomeController extends \Library\Core\Auth {
             } else {
                 $this->_view['bUpdateEntity'] = false; // clean exception
             }
-        } catch (\modules\crud\Models\CrudModelException $oException) {
+        } catch (\bundles\crud\Models\CrudModelException $oException) {
             $this->_view['bUpdateEntity'] = false;
             $this->_view['error_message'] = $oException->getMessage();
             $this->_view['error_code'] = $oException->getCode();
@@ -188,7 +188,7 @@ class HomeController extends \Library\Core\Auth {
             } else {
                 $this->_view['bDeleteEntity'] = false; // delete exception
             }
-        } catch (\modules\crud\Models\CrudModelException $oException) {
+        } catch (\bundles\crud\Models\CrudModelException $oException) {
             $this->_view['bDeleteEntity'] = false;
             $this->_view['error_message'] = $oException->getMessage();
             $this->_view['error_code'] = $oException->getCode();
@@ -214,7 +214,7 @@ class HomeController extends \Library\Core\Auth {
                 $this->_view['oEntities'] = $this->oCrudModel->getEntities();
             }
 
-        } catch (\modules\crud\Models\CrudModelException $oException) {
+        } catch (\bundles\crud\Models\CrudModelException $oException) {
             $this->_view['error_message'] = $oException->getMessage();
             $this->_view['error_code'] = $oException->getCode();
         }
@@ -228,7 +228,7 @@ class HomeController extends \Library\Core\Auth {
      */
     public function listByUserAction($sViewTpl = 'crud/list.tpl')
     {
-        assert('$this->oCrudModel instanceof \modules\crud\Models\Crud');
+        assert('$this->oCrudModel instanceof \bundles\crud\Models\Crud');
         try {
             if (isset($this->_params['view']) && strlen(isset($this->_params['view'])) > 0) {
                 $sViewTpl = $this->_params['view'];
@@ -240,7 +240,7 @@ class HomeController extends \Library\Core\Auth {
                 $this->_view['aEntityAttributes'] = $this->oCrudModel->getEntityAttributes();
             }
 
-        } catch (\modules\crud\Models\CrudModelException $oException) {
+        } catch (\bundles\crud\Models\CrudModelException $oException) {
             $this->_view['error_message'] = $oException->getMessage();
             $this->_view['error_code'] = $oException->getCode();
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\crud\Models;
+namespace bundles\crud\Models;
 
 /**
  * CRUD action model layer class
