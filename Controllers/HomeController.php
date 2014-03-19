@@ -111,7 +111,7 @@ class HomeController extends \Library\Core\Auth {
             $this->_view['error_code'] = $oException->getCode();
         }
 
-        $this->render($sViewTpl, $this->_view['iStatus']);
+        $this->render($sViewTpl, $this->_view['iStatus'], false, true);
     }
 
     /**
@@ -135,7 +135,7 @@ class HomeController extends \Library\Core\Auth {
             $this->_view['error_message'] = $oException->getMessage();
             $this->_view['error_code'] = $oException->getCode();
         }
-        $this->render($sViewTpl, $this->_view['iStatus']);
+        $this->render($sViewTpl, $this->_view['iStatus'], false, true);
     }
 
     /**
@@ -168,7 +168,7 @@ class HomeController extends \Library\Core\Auth {
             $this->_view['error_code'] = $oException->getCode();
         }
 
-        $this->render($sViewTpl, $this->_view['iStatus']);
+        $this->render($sViewTpl, $this->_view['iStatus'], false, true);
     }
 
 
@@ -194,7 +194,7 @@ class HomeController extends \Library\Core\Auth {
             $this->_view['error_code'] = $oException->getCode();
         }
 
-        $this->render($sViewTpl, $this->_view['iStatus']);
+        $this->render($sViewTpl, $this->_view['iStatus'], false, true);
     }
 
     /**
@@ -218,7 +218,7 @@ class HomeController extends \Library\Core\Auth {
             $this->_view['error_message'] = $oException->getMessage();
             $this->_view['error_code'] = $oException->getCode();
         }
-        $this->render($sViewTpl, $this->_view['iStatus']);
+        $this->render($sViewTpl, $this->_view['iStatus'], false, true);
     }
 
     /**
@@ -245,7 +245,7 @@ class HomeController extends \Library\Core\Auth {
             $this->_view['error_code'] = $oException->getCode();
         }
 
-        $this->render($sViewTpl, $this->_view['iStatus']);
+        $this->render($sViewTpl, $this->_view['iStatus'], false, true);
     }
 
 }
