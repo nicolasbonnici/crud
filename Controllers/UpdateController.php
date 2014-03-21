@@ -32,14 +32,27 @@ class UpdateController extends CrudController {
     {
         assert('($oEntity = $this->oCrudModel->getEntity()) && $oEntity->isLoaded()');
         try {
-            // Toutes les données du formulaire en JSON
+
+            // Form datas in JSON
             if (isset($this->_params['parameters'])) {
                 $aParameters = json_decode($this->_params['parameters'], true);
             }
 
-            // la vue
+            // Xeditable element data we accept empty value since a variable can be nullable it'll be handle by the Entity component
+            if (isset($this->_params['name'], $this->_params['value']) && !empty($this->_params['name'])) {
+                $aParameters = array(
+                	'name' => $this->_params['name'],
+                	'value' => $this->_params['value']
+                );
+            }
+
+            // The view
             if (isset($this->_params['view']) && strlen(isset($this->_params['view'])) > 0) {
                 $sViewTpl = $this->_params['view'];
+            }
+
+            if (empty($aParameters)) {
+                throw new CrudControllerException('No parameters sent for update action!');
             }
 
             if (($this->_view['bUpdateEntity'] = $this->oCrudModel->update($aParameters)) === true) {
