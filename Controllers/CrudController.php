@@ -26,6 +26,15 @@ class CrudController extends \Library\Core\Auth {
      */
     protected $aEntitiesScope = array();
 
+    protected $aActionsScope = array(
+            'create',
+            'read',
+            'update',
+            'delete',
+            'list',
+            'listByUser'
+    );
+
     /**
      * Pre dispatch hook for CrudController's actions
      * Ask ACL component for the current request
@@ -54,7 +63,7 @@ class CrudController extends \Library\Core\Auth {
             ($sEntityName = $this->_params['entity']) &&
             strlen($sEntityName) > 0 &&
             ($sAction = strtolower(substr($this->_controller, 0, (strlen($this->_controller) - strlen('controller'))))) &&
-            in_array($sAction, array('create', 'read', 'update', 'delete', 'list', 'listByUser')) &&
+            in_array($sAction, $this->aActionsScope) &&
             ($sCheckMethodName = 'has' . $sAction . 'Access') &&
             method_exists($this, $sCheckMethodName) &&
             $this->{$sCheckMethodName}(strtolower($sEntityName))
