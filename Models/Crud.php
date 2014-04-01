@@ -1,14 +1,16 @@
 <?php
-
 namespace bundles\crud\Models;
 
 /**
  * CRUD action model layer class
  *
  * @author niko
- *
+ *        
  */
+class Crud extends \Library\Core\Crud
+{
+}
 
-class Crud extends \Library\Core\Crud {}
-
-class CrudModelException extends \Exception {}
+class CrudModelException extends \Exception
+{
+}
