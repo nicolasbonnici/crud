@@ -1,9 +1,9 @@
 {% if oEntity|Exists %}
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h4 class="modal-title" id="myModalLabel">{{oTodo.label|safe}}</h4>
+    <h4 class="modal-title" id="myModalLabel">{{oEntity.label|safe}}</h4>
 </div>
-<div class="modal-body">{{oTodo.content|safe}}</div>
+<div class="modal-body">{{oEntity.content|safe}}</div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
 </div>
