@@ -47,9 +47,9 @@ class CrudController extends \Library\Core\Auth
      */
     public function __preDispatch()
     {
-        $this->_view['iStatus'] = self::XHR_STATUS_ERROR;
+        $this->aView['iStatus'] = self::XHR_STATUS_ERROR;
 
-        if (count($this->aEntitiesScope) > 0 && ! in_array($this->_params['entity'], $this->aEntitiesScope)) {
+        if (count($this->aEntitiesScope) > 0 && ! in_array($this->aParams['entity'], $this->aEntitiesScope)) {
             throw new CrudControllerException('Entity restricted in CrudController scope', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
         }
 
@@ -58,10 +58,10 @@ class CrudController extends \Library\Core\Auth
         }
 
         // Check user permissions on entity then entity itself
-        if (isset($this->_params['entity']) && ($sEntityName = $this->_params['entity']) && strlen($sEntityName) > 0 && ($sAction = strtolower(substr($this->_controller, 0, (strlen($this->_controller) - strlen('controller'))))) && in_array($sAction, $this->aActionsScope) && ($sCheckMethodName = 'has' . $sAction . 'Access') && method_exists($this, $sCheckMethodName) && $this->{$sCheckMethodName}(strtolower($sEntityName))) {
+        if (isset($this->aParams['entity']) && ($sEntityName = $this->aParams['entity']) && strlen($sEntityName) > 0 && ($sAction = strtolower(substr($this->sController, 0, (strlen($this->sController) - strlen('controller'))))) && in_array($sAction, $this->aActionsScope) && ($sCheckMethodName = 'has' . $sAction . 'Access') && method_exists($this, $sCheckMethodName) && $this->{$sCheckMethodName}(strtolower($sEntityName))) {
 
             try {
-                $iPrimaryKey = ((isset($this->_params['pk']) && intval($this->_params['pk']) > 0) ? intval($this->_params['pk']) : 0);
+                $iPrimaryKey = ((isset($this->aParams['pk']) && intval($this->aParams['pk']) > 0) ? intval($this->aParams['pk']) : 0);
 
                 // Check Entity instance with Crud model constructor
                 $this->oCrudModel = new \bundles\crud\Models\Crud(ucfirst($sEntityName), $iPrimaryKey, $this->oUser);
@@ -69,7 +69,7 @@ class CrudController extends \Library\Core\Auth
                 throw new CrudControllerException('Invalid Entity requested!', \Library\Core\Crud::ERROR_ENTITY_NOT_LOADABLE);
             }
         } else {
-            throw new CrudControllerException('Error forbidden by ACL or unauthorized action: ' . $this->_controller, \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
+            throw new CrudControllerException('Error forbidden by ACL or unauthorized action: ' . $this->sController, \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
         }
     }
 

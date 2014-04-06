@@ -30,27 +30,27 @@ class CreateController extends CrudController
         assert('$this->oCrudModel instanceof \bundles\crud\Models\Crud');
         try {
             // Toutes les données du formulaire en JSON
-            if (isset($this->_params['parameters'])) {
-                $aParameters = json_decode($this->_params['parameters'], true);
+            if (isset($this->aParams['parameters'])) {
+                $aParameters = json_decode($this->aParams['parameters'], true);
             }
             
-            if (isset($this->_params['view']) && strlen(isset($this->_params['view'])) > 0) {
-                $sViewTpl = $this->_params['view'];
+            if (isset($this->aParams['view']) && strlen(isset($this->aParams['view'])) > 0) {
+                $sViewTpl = $this->aParams['view'];
             }
             
             if ($this->oCrudModel->create($aParameters)) {
-                $this->_view['bCreateEntity'] = true;
-                $this->_view['iStatus'] = self::XHR_STATUS_OK;
-                $this->_view['oEntity'] = $this->oCrudModel->getEntity();
+                $this->aView['bCreateEntity'] = true;
+                $this->aView['iStatus'] = self::XHR_STATUS_OK;
+                $this->aView['oEntity'] = $this->oCrudModel->getEntity();
             } else {
-                $this->_view['bCreateEntity'] = false;
+                $this->aView['bCreateEntity'] = false;
             }
         } catch (\bundles\crud\Models\CrudModelException $oException) {
-            $this->_view['bCreateNewEntity'] = false;
-            $this->_view['error_message'] = $oException->getMessage();
-            $this->_view['error_code'] = $oException->getCode();
+            $this->aView['bCreateNewEntity'] = false;
+            $this->aView['error_message'] = $oException->getMessage();
+            $this->aView['error_code'] = $oException->getCode();
         }
         
-        $this->render($sViewTpl, $this->_view['iStatus'], false, true);
+        $this->render($sViewTpl, $this->aView['iStatus'], false, true);
     }
 }

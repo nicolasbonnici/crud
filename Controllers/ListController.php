@@ -29,19 +29,19 @@ class ListController extends CrudController
     {
         assert('$this->oCrudModel instanceof \bundles\crud\Models\Crud');
         try {
-            if (isset($this->_params['view']) && strlen(isset($this->_params['view'])) > 0) {
-                $sViewTpl = $this->_params['view'];
+            if (isset($this->aParams['view']) && strlen(isset($this->aParams['view'])) > 0) {
+                $sViewTpl = $this->aParams['view'];
             }
             
             if ($this->oCrudModel->loadEntities()) {
-                $this->_view['iStatus'] = self::XHR_STATUS_OK;
-                $this->_view['oEntities'] = $this->oCrudModel->getEntities();
+                $this->aView['iStatus'] = self::XHR_STATUS_OK;
+                $this->aView['oEntities'] = $this->oCrudModel->getEntities();
             }
         } catch (\bundles\crud\Models\CrudModelException $oException) {
-            $this->_view['error_message'] = $oException->getMessage();
-            $this->_view['error_code'] = $oException->getCode();
+            $this->aView['error_message'] = $oException->getMessage();
+            $this->aView['error_code'] = $oException->getCode();
         }
-        $this->render($sViewTpl, $this->_view['iStatus'], false, true);
+        $this->render($sViewTpl, $this->aView['iStatus'], false, true);
     }
 
     /**
@@ -53,20 +53,20 @@ class ListController extends CrudController
     {
         assert('$this->oCrudModel instanceof \bundles\crud\Models\Crud');
         try {
-            if (isset($this->_params['view']) && strlen(isset($this->_params['view'])) > 0) {
-                $sViewTpl = $this->_params['view'];
+            if (isset($this->aParams['view']) && strlen(isset($this->aParams['view'])) > 0) {
+                $sViewTpl = $this->aParams['view'];
             }
             
             if ($this->oCrudModel->loadUserEntities()) {
-                $this->_view['iStatus'] = self::XHR_STATUS_OK;
-                $this->_view['oEntities'] = $this->oCrudModel->getEntities();
-                $this->_view['aEntityAttributes'] = $this->oCrudModel->getEntityAttributes();
+                $this->aView['iStatus'] = self::XHR_STATUS_OK;
+                $this->aView['oEntities'] = $this->oCrudModel->getEntities();
+                $this->aView['aEntityAttributes'] = $this->oCrudModel->getEntityAttributes();
             }
         } catch (\bundles\crud\Models\CrudModelException $oException) {
-            $this->_view['error_message'] = $oException->getMessage();
-            $this->_view['error_code'] = $oException->getCode();
+            $this->aView['error_message'] = $oException->getMessage();
+            $this->aView['error_code'] = $oException->getCode();
         }
         
-        $this->render($sViewTpl, $this->_view['iStatus'], false, true);
+        $this->render($sViewTpl, $this->aView['iStatus'], false, true);
     }
 }
