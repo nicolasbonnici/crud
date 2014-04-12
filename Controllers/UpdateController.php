@@ -69,6 +69,6 @@ class UpdateController extends CrudController
             $this->aView['error_code'] = $oException->getCode();
         }
         
-        $this->render($sViewTpl, $this->aView['iStatus'], false, true);
+        $this->oView->render($this->aView, $sViewTpl, $this->aView['iStatus'], false, true);
     }
 }
