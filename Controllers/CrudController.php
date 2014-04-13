@@ -47,7 +47,7 @@ class CrudController extends \Library\Core\Auth
      */
     public function __preDispatch()
     {
-        $this->aView['iStatus'] = self::XHR_STATUS_ERROR;
+        $this->aView['iStatus'] = \Library\Core\View::XHR_STATUS_ERROR;
 
         if (count($this->aEntitiesScope) > 0 && ! in_array($this->aParams['entity'], $this->aEntitiesScope)) {
             throw new CrudControllerException('Entity restricted in CrudController scope', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
@@ -58,7 +58,13 @@ class CrudController extends \Library\Core\Auth
         }
 
         // Check user permissions on entity then entity itself
-        if (isset($this->aParams['entity']) && ($sEntityName = $this->aParams['entity']) && strlen($sEntityName) > 0 && ($sAction = strtolower(substr($this->sController, 0, (strlen($this->sController) - strlen('controller'))))) && in_array($sAction, $this->aActionsScope) && ($sCheckMethodName = 'has' . $sAction . 'Access') && method_exists($this, $sCheckMethodName) && $this->{$sCheckMethodName}(strtolower($sEntityName))) {
+        if (
+            isset($this->aParams['entity']) &&
+            ($sEntityName = $this->aParams['entity']) && strlen($sEntityName) > 0 &&
+            ($sAction = strtolower(substr($this->sController, 0, (strlen($this->sController) - strlen('controller'))))) &&
+            in_array($sAction, $this->aActionsScope) && ($sCheckMethodName = 'has' . $sAction . 'Access') &&
+            method_exists($this, $sCheckMethodName) && $this->{$sCheckMethodName}(strtolower($sEntityName))
+        ) {
 
             try {
                 $iPrimaryKey = ((isset($this->aParams['pk']) && intval($this->aParams['pk']) > 0) ? intval($this->aParams['pk']) : 0);
@@ -69,7 +75,6 @@ class CrudController extends \Library\Core\Auth
                 throw new CrudControllerException('Invalid Entity requested!', \Library\Core\Crud::ERROR_ENTITY_NOT_LOADABLE);
             }
         } else {
-            die(var_dump(isset($this->aParams['entity']) , ($sEntityName = $this->aParams['entity']) , strlen($sEntityName) > 0 , ($sAction = strtolower(substr($this->sController, 0, (strlen($this->sController) - strlen('controller'))))) , in_array($sAction, $this->aActionsScope) , ($sCheckMethodName = 'has' . $sAction . 'Access') , method_exists($this, $sCheckMethodName) && $this->{$sCheckMethodName}(strtolower($sEntityName))));
             throw new CrudControllerException('Error forbidden by ACL or unauthorized action: ' . $this->sController, \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
         }
     }
