@@ -36,9 +36,9 @@ class ReadController extends CrudController
             $oEntity = $this->oCrudModel->read();
             $oEntity->pk = $oEntity->getId();
             $this->aView['oEntity'] = $this->oCrudModel->read();
-            $this->aView['iStatus'] = self::XHR_STATUS_OK;
+            $this->aView['iStatus'] = \Library \Core\View::XHR_STATUS_OK;
         } catch (\bundles\crud\Models\CrudModelException $oException) {
-            $this->aView['iStatus'] = self::XHR_STATUS_ERROR;
+            $this->aView['iStatus'] = \Library \Core\View::XHR_STATUS_ERROR;
             $this->aView['error_message'] = $oException->getMessage();
             $this->aView['error_code'] = $oException->getCode();
         }
