@@ -47,7 +47,7 @@ class CrudController extends \Library\Core\Auth
      */
     public function __preDispatch()
     {
-        $this->aView['iStatus'] = \Library\Core\View::XHR_STATUS_ERROR;
+        $this->aView['iStatus'] = self::XHR_STATUS_ERROR;
 
         if (count($this->aEntitiesScope) > 0 && ! in_array($this->aParams['entity'], $this->aEntitiesScope)) {
             throw new CrudControllerException('Entity restricted in CrudController scope', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);

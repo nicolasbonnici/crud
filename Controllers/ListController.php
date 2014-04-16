@@ -46,7 +46,7 @@ class ListController extends CrudController
             }
             $aLimit = array($iOffset, $iLoadStep);
             if ($this->oCrudModel->load('created', 'DESC', $aLimit)) {
-                $this->aView['iStatus'] = \Library\Core\View::XHR_STATUS_OK;
+                $this->aView['iStatus'] = self::XHR_STATUS_OK;
                 $this->aView['oEntities'] = $this->oCrudModel->getEntities();
             }
         } catch (\bundles\crud\Models\CrudModelException $oException) {
@@ -70,7 +70,7 @@ class ListController extends CrudController
             }
 
             if ($this->oCrudModel->loadUserEntities()) {
-                $this->aView['iStatus'] = \Library\Core\View::XHR_STATUS_OK;
+                $this->aView['iStatus'] = self::XHR_STATUS_OK;
                 $this->aView['oEntities'] = $this->oCrudModel->getEntities();
                 $this->aView['aEntityAttributes'] = $this->oCrudModel->getEntityAttributes();
             }
