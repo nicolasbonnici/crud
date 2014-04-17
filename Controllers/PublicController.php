@@ -47,10 +47,10 @@ class PublicController extends \Library\Core\Controller
         if (count($this->aEntitiesScope) > 0 && ! in_array($this->aParams['entity'], $this->aEntitiesScope)) {
             throw new PublicControllerException('Forbidden or not found entity!', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
         } elseif (
-            ($sAction = strtolower(substr($this->sController, 0, (strlen($this->sController) - strlen('controller'))))) &&
-            ! in_array($sAction, $this->aActionsScope)
+            ($sAction = strtolower(substr($this->sAction, 0, (strlen($this->sAction) - strlen('action'))))) &&
+            ! in_array($sAction, $this->aActionsScope )
         ) {
-            throw new PublicControllerException('Forbidden or not found action!', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
+            throw new PublicControllerException('Forbidden or not found action! (' . $$sAction . ') ', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
         } else {
 
             try {
