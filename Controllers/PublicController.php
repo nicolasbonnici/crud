@@ -95,7 +95,7 @@ class PublicController extends \Library\Core\Controller
             }
 
             if ($iOffset === 0) {
-                $iLoadStep = 100;
+                $iLoadStep = 50;
             }
             $aLimit = array($iOffset, $iLoadStep);
             if ($this->oCrudModel->load('created', 'DESC', $aLimit)) {
