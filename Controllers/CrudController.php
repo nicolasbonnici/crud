@@ -61,7 +61,7 @@ class CrudController extends \Library\Core\Auth
         if (
             isset($this->aParams['entity']) &&
             ($sEntityName = $this->aParams['entity']) && strlen($sEntityName) > 0 &&
-            ($sAction = strtolower(substr($this->sController, 0, (strlen($this->sController) - strlen('controller'))))) &&
+            ($sAction = ucfirst(substr($this->sController, 0, (strlen($this->sController) - strlen('controller'))))) &&
             in_array($sAction, $this->aActionsScope) && ($sCheckMethodName = 'has' . $sAction . 'Access') &&
             method_exists($this, $sCheckMethodName) && $this->{$sCheckMethodName}(strtolower($sEntityName))
         ) {
@@ -75,7 +75,7 @@ class CrudController extends \Library\Core\Auth
                 throw new CrudControllerException('Invalid Entity requested!', \Library\Core\Crud::ERROR_ENTITY_NOT_LOADABLE);
             }
         } else {
-            throw new CrudControllerException('Error forbidden by ACL or unauthorized action: ' . $this->sController, \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
+            throw new CrudControllerException('Error forbidden by ACL or unauthorized action: ' . $this->sController . ' on entity: ' .$sEntityName . '.', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
         }
     }
 
