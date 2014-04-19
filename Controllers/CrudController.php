@@ -60,10 +60,10 @@ class CrudController extends \Library\Core\Auth
         // Check user permissions on entity then entity itself
         if (
             isset($this->aParams['entity']) &&
-            ($sEntityName = $this->aParams['entity']) && strlen($sEntityName) > 0 &&
+            ($sEntityName = strtolower($this->aParams['entity'])) && strlen($sEntityName) > 0 &&
             ($sAction = ucfirst(substr($this->sController, 0, (strlen($this->sController) - strlen('controller'))))) &&
-            in_array($sAction, $this->aActionsScope) && ($sCheckMethodName = 'has' . $sAction . 'Access') &&
-            method_exists($this, $sCheckMethodName) && $this->{$sCheckMethodName}(strtolower($sEntityName))
+            in_array(strtolower($sAction), $this->aActionsScope) && ($sCheckMethodName = 'has' . $sAction . 'Access') &&
+            method_exists($this, $sCheckMethodName) && $this->{$sCheckMethodName}(ucfirst($sEntityName))
         ) {
 
             try {
@@ -75,7 +75,14 @@ class CrudController extends \Library\Core\Auth
                 throw new CrudControllerException('Invalid Entity requested!', \Library\Core\Crud::ERROR_ENTITY_NOT_LOADABLE);
             }
         } else {
-            throw new CrudControllerException('Error forbidden by ACL or unauthorized action: ' . $this->sController . ' on entity: ' .$sEntityName . '.', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
+            die(var_dump(
+                isset($this->aParams['entity']) ,
+                ($sEntityName = strtolower($this->aParams['entity'])) , strlen($sEntityName) > 0 ,
+                ($sAction = ucfirst(substr($this->sController, 0, (strlen($this->sController) - strlen('controller'))))) ,
+                in_array(strtolower($sAction), $this->aActionsScope) , ($sCheckMethodName = 'has' . $sAction . 'Access') ,
+                method_exists($this, $sCheckMethodName) , $this->{$sCheckMethodName}(ucfirst($sEntityName))
+            ));
+            throw new CrudControllerException('Error forbidden by ACL or unauthorized action: ' . $sAction . ' on entity: ' .$sEntityName . '.', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
         }
     }
 
