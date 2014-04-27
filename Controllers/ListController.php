@@ -25,7 +25,7 @@ class ListController extends CrudController
      *
      * @param string $sViewTpl
      */
-    public function indexAction($sViewTpl = 'list/list.tpl', $iOffset = 0, $iLoadStep = 25)
+    public function indexAction($sViewTpl = 'list/list.tpl', $iOffset = 0, $iLoadStep = 10)
     {
         assert('$this->oCrudModel instanceof \bundles\crud\Models\Crud');
         try {
@@ -41,9 +41,6 @@ class ListController extends CrudController
                 $iLoadStep = (int) $this->aParams['iLoadStep'];
             }
 
-            if ($iOffset === 0) {
-                $iLoadStep = 100;
-            }
             $aLimit = array($iOffset, $iLoadStep);
             if ($this->oCrudModel->load('created', 'DESC', $aLimit)) {
                 $this->aView['iStatus'] = self::XHR_STATUS_OK;
@@ -53,32 +50,6 @@ class ListController extends CrudController
             $this->aView['error_message'] = $oException->getMessage();
             $this->aView['error_code'] = $oException->getCode();
         }
-        $this->oView->render($this->aView, $sViewTpl, $this->aView['iStatus'], false, true);
-    }
-
-    /**
-     * Load latest entities restricted to the curently instantiate \app\Entities\User session scope
-     *
-     * @param string $sViewTpl
-     */
-    public function listByUserAction($sViewTpl = 'list/list.tpl')
-    {
-        assert('$this->oCrudModel instanceof \bundles\crud\Models\Crud');
-        try {
-            if (isset($this->aParams['view']) && strlen(isset($this->aParams['view'])) > 0) {
-                $sViewTpl = $this->aParams['view'];
-            }
-
-            if ($this->oCrudModel->loadUserEntities()) {
-                $this->aView['iStatus'] = self::XHR_STATUS_OK;
-                $this->aView['oEntities'] = $this->oCrudModel->getEntities();
-                $this->aView['aEntityAttributes'] = $this->oCrudModel->getEntityAttributes();
-            }
-        } catch (\bundles\crud\Models\CrudModelException $oException) {
-            $this->aView['error_message'] = $oException->getMessage();
-            $this->aView['error_code'] = $oException->getCode();
-        }
-
         $this->oView->render($this->aView, $sViewTpl, $this->aView['iStatus'], false, true);
     }
 }
