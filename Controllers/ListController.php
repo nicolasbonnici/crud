@@ -25,7 +25,7 @@ class ListController extends CrudController
      *
      * @param string $sViewTpl
      */
-    public function indexAction($sViewTpl = 'list/list.tpl', $iOffset = 0, $iLoadStep = 10)
+    public function indexAction($sViewTpl = 'list/list.tpl', $iOffset = 0, $iLoadStep = 10, $sOrderBy = 'lastupdate', $sOrder = 'DESC')
     {
         assert('$this->oCrudModel instanceof \bundles\crud\Models\Crud');
         try {
@@ -41,8 +41,16 @@ class ListController extends CrudController
                 $iLoadStep = (int) $this->aParams['iLoadStep'];
             }
 
+            if (isset($this->aParams['orderby']) && $this->aParams['orderby'] > 0) {
+                $sOrderBy = $this->aParams['orderby'];
+            }
+
+            if (isset($this->aParams['order']) && $this->aParams['order'] > 0) {
+                $sOrder = $this->aParams['order'];
+            }
+
             $aLimit = array($iOffset, $iLoadStep);
-            if ($this->oCrudModel->load('created', 'DESC', $aLimit)) {
+            if ($this->oCrudModel->load($sOrderBy, $sOrder, $aLimit)) {
                 $this->aView['iStatus'] = self::XHR_STATUS_OK;
                 $this->aView['oEntities'] = $this->oCrudModel->getEntities();
             }
