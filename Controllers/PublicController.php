@@ -21,6 +21,9 @@ class PublicController extends \Library\Core\Controller
      * @var array
      */
     protected $aEntitiesScope = array(
+    	'Category',
+    	'Tag',
+    	'Post',
     	'FeedItem',
     	'feed'
     );
@@ -103,6 +106,38 @@ class PublicController extends \Library\Core\Controller
                 $this->aView['oEntities'] = $this->oCrudModel->getEntities();
             }
         } catch (\bundles\crud\Models\CrudModelException $oException) {
+            $this->aView['error_message'] = $oException->getMessage();
+            $this->aView['error_code'] = $oException->getCode();
+        }
+        $this->oView->render($this->aView, $sViewTpl, $this->aView['iStatus'], false, true);
+    }
+
+    /**
+     * Read an entity then pass it to a given view
+     *
+     * @param string $sViewTpl
+     */
+    public function readAction($sViewTpl = 'read/read.tpl')
+    {
+        assert('($oEntity = $this->oCrudModel->getEntity()) && $oEntity->isLoaded()');
+        try {
+            if (isset($this->aParams['view']) && strlen(isset($this->aParams['view'])) > 0) {
+                $sViewTpl = $this->aParams['view'];
+            }
+
+            $oEntity = $this->oCrudModel->getEntity();
+            $oEntity->pk = $oEntity->getId();
+            $this->aView['oEntity'] = $oEntity;
+
+            $this->aView['aEntityFields'] = array();
+            foreach ($oEntity->getAttributes() as $sAttribute) {
+                if ($oEntity->getDataType($sAttribute) === 'string') {
+                    $this->aView['aEntityFields'][$sAttribute] = $oEntity->{$sAttribute};
+                }
+            }
+            $this->aView['iStatus'] = self::XHR_STATUS_OK;
+        } catch (\bundles\crud\Models\CrudModelException $oException) {
+            $this->aView['iStatus'] = self::XHR_STATUS_ERROR;
             $this->aView['error_message'] = $oException->getMessage();
             $this->aView['error_code'] = $oException->getCode();
         }
