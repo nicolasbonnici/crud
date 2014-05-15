@@ -60,19 +60,19 @@ class CrudController extends \Library\Core\Auth
         // Check user permissions on entity then entity itself
         if (
             isset($this->aParams['entity']) &&
-            ($sEntityName = strtolower($this->aParams['entity'])) && strlen($sEntityName) > 0 &&
+            ($sEntityName = $this->aParams['entity']) && strlen($sEntityName) > 0 &&
             ($sAction = ucfirst(substr($this->sController, 0, (strlen($this->sController) - strlen('controller'))))) &&
             in_array(strtolower($sAction), $this->aActionsScope) && ($sCheckMethodName = 'has' . $sAction . 'Access') &&
-            method_exists($this, $sCheckMethodName) && $this->{$sCheckMethodName}(ucfirst($sEntityName))
+            method_exists($this, $sCheckMethodName) && $this->{$sCheckMethodName}($sEntityName)
         ) {
 
             try {
                 $iPrimaryKey = ((isset($this->aParams['pk']) && intval($this->aParams['pk']) > 0) ? intval($this->aParams['pk']) : 0);
 
                 // Check Entity instance with Crud model constructor
-                $this->oCrudModel = new \bundles\crud\Models\Crud(ucfirst($sEntityName), $iPrimaryKey, $this->oUser);
+                $this->oCrudModel = new \bundles\crud\Models\Crud($sEntityName, $iPrimaryKey, $this->oUser);
             } catch (\bundles\crud\Models\CrudModelException $oException) {
-                throw new CrudControllerException('Invalid Entity requested!', \Library\Core\Crud::ERROR_ENTITY_NOT_LOADABLE);
+                throw new CrudControllerException('Invalid Entity requested: ' . $sEntityName, \Library\Core\Crud::ERROR_ENTITY_NOT_LOADABLE);
             }
         } else {
             throw new CrudControllerException('Error forbidden by ACL or unauthorized action: ' . $sAction . ' on entity: ' .$sEntityName . '.', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);

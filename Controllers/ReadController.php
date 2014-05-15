@@ -36,6 +36,13 @@ class ReadController extends CrudController
             $oEntity = $this->oCrudModel->read();
             $oEntity->pk = $oEntity->getId();
             $this->aView['oEntity'] = $this->oCrudModel->read();
+
+            $this->aView['aEntityFields'] = array();
+            foreach ($oEntity->getAttributes() as $sAttribute) {
+                if ($oEntity->getDataType($sAttribute) === 'string') {
+                    $this->aView['aEntityFields'][$sAttribute] = $oEntity->{$sAttribute};
+                }
+            }
             $this->aView['iStatus'] = self::XHR_STATUS_OK;
         } catch (\bundles\crud\Models\CrudModelException $oException) {
             $this->aView['iStatus'] = self::XHR_STATUS_ERROR;
