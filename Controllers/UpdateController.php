@@ -35,34 +35,37 @@ class UpdateController extends CrudController
         assert('($oEntity = $this->oCrudModel->getEntity()) && $oEntity->isLoaded()');
         try {
 
-            // Form datas in JSON
-            if (isset($this->aParams['parameters'])) {
-                $aParameters = json_decode($this->aParams['parameters'], true);
-            }
-
-            // Xeditable element data we accept empty value since a variable can be nullable it'll be handle by the Entity component
-            if (isset($this->aParams['name'], $this->aParams['value']) && ! empty($this->aParams['name'])) {
-                $aParameters = array(
-                    'name' => $this->aParams['name'],
-                    'value' => $this->aParams['value']
-                );
-            }
-
-            // The view
-            if (isset($this->aParams['view']) && strlen(isset($this->aParams['view'])) > 0) {
-                $sViewTpl = $this->aParams['view'];
-            }
-
-            if (empty($aParameters)) {
+            // Classic HTML form datas
+            if (! isset($this->aParams['parameters'])) {
                 throw new CrudControllerException('No parameters sent for update action!');
+            } else {
+
+                foreach ($this->aParams['parameters'] as $sKey=>$mValue) {
+                    $aParameters[$sKey] = $mValue;
+                }
+
+                // Xeditable element data we also accept empty value since a variable can be nullable it'll be handle
+                // by the Entity component for ORM data integrity
+                if (isset($this->aParams['name'], $this->aParams['value']) && ! empty($this->aParams['name'])) {
+                    $aParameters = array(
+                        'name' => $this->aParams['name'],
+                        'value' => $this->aParams['value']
+                    );
+                }
+
+                // View template overwrite
+                if (isset($this->aParams['view']) && strlen(isset($this->aParams['view'])) > 0) {
+                    $sViewTpl = $this->aParams['view'];
+                }
+
+                if (($this->aView['bUpdateEntity'] = $this->oCrudModel->update($aParameters)) === true) {
+                    $this->aView['iStatus'] = self::XHR_STATUS_OK;
+                    $this->aView['oEntity'] = $this->oCrudModel->getEntity();
+                } else {
+                    $this->aView['bUpdateEntity'] = false; // clean exception
+                }
             }
 
-            if (($this->aView['bUpdateEntity'] = $this->oCrudModel->update($aParameters)) === true) {
-                $this->aView['iStatus'] = self::XHR_STATUS_OK;
-                $this->aView['oEntity'] = $this->oCrudModel->getEntity();
-            } else {
-                $this->aView['bUpdateEntity'] = false; // clean exception
-            }
         } catch (\bundles\crud\Models\CrudModelException $oException) {
             $this->aView['bUpdateEntity'] = false;
             $this->aView['error_message'] = $oException->getMessage();
