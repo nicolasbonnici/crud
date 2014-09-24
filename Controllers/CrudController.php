@@ -23,7 +23,7 @@ class CrudController extends \Library\Core\Auth
     protected $oCrudModel;
 
     /**
-     * One dimensional array to restrict the CrudController entities scope (Before even check the ACL)
+     * Two dimensional array to restrict the CrudController entities scope (Before even check the ACL)
      *
      * @var array
      */
