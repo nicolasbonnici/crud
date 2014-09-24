@@ -27,7 +27,12 @@ class CrudController extends \Library\Core\Auth
      *
      * @var array
      */
-    protected $aEntitiesScope = array();
+    protected $aEntitiesScope = array(
+    	'Todo' => array(
+    	   'entity'     => '\bundles\todo\Entities\Todo',
+    	   'collection' => '\bundles\todo\Entities\Collection\TodoCollection'
+        )
+    );
 
     protected $aActionsScope = array(
         'create',
@@ -49,8 +54,8 @@ class CrudController extends \Library\Core\Auth
     {
         $this->aView['iStatus'] = self::XHR_STATUS_ERROR;
 
-        if (count($this->aEntitiesScope) > 0 && ! in_array($this->aParams['entity'], $this->aEntitiesScope)) {
-            throw new CrudControllerException('Entity restricted in CrudController scope', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
+        if (count($this->aEntitiesScope) > 0 && ! array_key_exists($this->aParams['entity'], $this->aEntitiesScope)) {
+            throw new CrudControllerException('Entity ' . $this->aParams['entity'] . ' restricted in CrudController scope', \Library\Core\Crud::ERROR_FORBIDDEN_BY_ACL);
         }
 
         if ($this->oUser->getId() !== intval($this->_session['iduser'])) {
@@ -70,7 +75,7 @@ class CrudController extends \Library\Core\Auth
                 $iPrimaryKey = ((isset($this->aParams['pk']) && intval($this->aParams['pk']) > 0) ? intval($this->aParams['pk']) : 0);
 
                 // Check Entity instance with Crud model constructor
-                $this->oCrudModel = new \bundles\crud\Models\Crud($sEntityName, $iPrimaryKey, $this->oUser);
+                $this->oCrudModel = new \bundles\crud\Models\Crud($this->aEntitiesScope[$sEntityName]['entity'], $this->aEntitiesScope[$sEntityName]['collection'], $iPrimaryKey, $this->oUser);
             } catch (\bundles\crud\Models\CrudModelException $oException) {
                 throw new CrudControllerException('Invalid Entity requested: ' . $sEntityName, \Library\Core\Crud::ERROR_ENTITY_NOT_LOADABLE);
             }
